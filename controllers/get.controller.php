@@ -35,7 +35,7 @@ class ControllerGet
         $return->fncResponse($response);
     }
 
-    
+
     //PETICIONES GET CON FILTRO ENTRE TABLAS RELACIONADAS
     static public function getRelDataFilter($rel, $type, $select, $linkTo, $equalTo, $order, $mode, $start, $end)
     {
@@ -46,15 +46,26 @@ class ControllerGet
         $return->fncResponse($response);
     }
 
-       //PETICIONES GET PARA BUSCADOR SIN RELACIONES
-       static public function getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end)
-       {
-   
-           $response = ModelGet::getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end);
-   
-           $return = new ControllerGet();
-           $return->fncResponse($response);
-       }
+    //PETICIONES GET PARA BUSCADOR SIN RELACIONES CON FILTRO
+    static public function getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end)
+    {
+
+        $response = ModelGet::getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end);
+
+        $return = new ControllerGet();
+        $return->fncResponse($response);
+    }
+
+    //PETICIONES GET PARA BUSCADOR CON RELACIONES CON FILTRO
+    static public function getRelDataSearch($rel, $type, $select, $linkTo, $search, $order, $mode, $start, $end)
+    {
+
+        $response = ModelGet::getRelDataSearch($rel, $type, $select, $linkTo, $search, $order, $mode, $start, $end);
+
+        $return = new ControllerGet();
+        $return->fncResponse($response);
+    }
+
 
 
 
@@ -71,7 +82,8 @@ class ControllerGet
         } else {
             $json = array(
                 'status' => 404,
-                'results' => 'Not Found'
+                'results' => 'Not Found',
+                'method' => 'get'
             );
         }
 

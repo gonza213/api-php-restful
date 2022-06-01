@@ -20,7 +20,6 @@ $end = $_GET['end'] ?? null;
 
 $response = new ControllerGet();
 
-
 //PETICIONES GET CON FILTRO
 if(isset($_GET['column']) && isset($_GET['value']) && !isset($_GET['rel']) && !isset($_GET['type']) ){
     $response->getDataFilter($table, $select, $_GET['column'], $_GET['value'], $order, $mode, $start, $end);
@@ -35,9 +34,13 @@ if(isset($_GET['column']) && isset($_GET['value']) && !isset($_GET['rel']) && !i
 
     $response->getRelDataFilter($_GET['rel'], $_GET['type'], $select, $_GET['column'], $_GET['value'], $order, $mode, $start, $end);
 
-    //PETICIONES GET PARA EL BUSCADOR SIN RELACIONES
-}else if(isset($_GET['column']) && isset($_GET['search'])){
+    //PETICIONES GET PARA EL BUSCADOR CON FILTRO O SIN FILTRO Y SIN RELACIONES
+}else if(isset($_GET['column']) && isset($_GET['search']) && !isset($_GET['rel']) && !isset($_GET['type'])){
     $response->getDataSearch($table, $select, $_GET['column'], $_GET['search'], $order, $mode, $start, $end);
+    
+    //PETICIONES GET PARA EL BUSCADOR CON FILTRO Y CON RELACIONES
+}else if(isset($_GET['column']) && isset($_GET['search']) && isset($_GET['rel']) && isset($_GET['type']) && $table == 'relations'){
+    $response->getRelDataSearch($_GET['rel'], $_GET['type'], $select, $_GET['column'], $_GET['search'], $order, $mode, $start, $end);
 }else{
 //PETICIONES GET SIN FILTRO
     $response->getData($table, $select, $order, $mode, $start, $end);
