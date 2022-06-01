@@ -46,6 +46,16 @@ class ControllerGet
         $return->fncResponse($response);
     }
 
+       //PETICIONES GET PARA BUSCADOR SIN RELACIONES
+       static public function getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end)
+       {
+   
+           $response = ModelGet::getDataSearch($tabla, $select, $linkTo, $search, $order, $mode, $start, $end);
+   
+           $return = new ControllerGet();
+           $return->fncResponse($response);
+       }
+
 
 
     //RESPUESTA DE CONTROLADORES

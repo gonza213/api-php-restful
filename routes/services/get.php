@@ -37,7 +37,7 @@ if(isset($_GET['column']) && isset($_GET['value']) && !isset($_GET['rel']) && !i
 
     //PETICIONES GET PARA EL BUSCADOR SIN RELACIONES
 }else if(isset($_GET['column']) && isset($_GET['search'])){
-    $response->getRelDataSearch($_GET['rel'], $_GET['type'], $table, $select, $_GET['column'], $_GET['value'], $order, $mode, $start, $end);
+    $response->getDataSearch($table, $select, $_GET['column'], $_GET['search'], $order, $mode, $start, $end);
 }else{
 //PETICIONES GET SIN FILTRO
     $response->getData($table, $select, $order, $mode, $start, $end);

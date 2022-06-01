@@ -82,9 +82,9 @@ class ModelGet
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-     //PETICIONES GET SIN FILTRO ENTRE TABLAS RELACIONADAS
-     static public function getRelData($rel, $type, $select, $order, $mode, $start, $end)
-     {
+    //PETICIONES GET SIN FILTRO ENTRE TABLAS RELACIONADAS
+    static public function getRelData($rel, $type, $select, $order, $mode, $start, $end)
+    {
 
         $relArray = explode(",", $rel);
         $typeArray = explode(",", $type);
@@ -94,44 +94,42 @@ class ModelGet
         if (count($relArray) > 1) {
             foreach ($relArray as $key => $value) {
                 if ($key > 0) {
-                    $innerJoinText .= "INNER JOIN ".$value." ON ".$relArray[0].".".$typeArray[0]." = ".$value.".".$typeArray[$key]." ";
+                    $innerJoinText .= "INNER JOIN " . $value . " ON " . $relArray[0] . "." . $typeArray[0] . " = " . $value . "." . $typeArray[$key] . " ";
                 }
             }
-       
-         //Secuencia sin ordenar y sin limites
-         $sql = "SELECT $select FROM $relArray[0] $innerJoinText";
- 
-         //Secuencia ordenada y sin limites
-         if ($order != null && $mode != null && $start == null && $end == null) {
-             $sql = "SELECT $select FROM $relArray[0] $innerJoinText ORDER BY $order $mode";
-         }
- 
-         //Secuencia ordenada y con limites
-         if ($order != null && $mode != null && $start != null && $end != null) {
-             $sql = "SELECT $select FROM $relArray[0] $innerJoinText ORDER BY $order $mode LIMIT $start, $end";
-         }
- 
-         //Secuencia sin ordenar y con limites
-         if ($order == null && $mode == null && $start != null && $end != null) {
-             $sql = "SELECT $select FROM $relArray[0] $innerJoinText LIMIT $start, $end";
-         }
- 
- 
-         $stmt = Conexion::conectar()->prepare($sql);
- 
-         $stmt->execute();
- 
-         return $stmt->fetchAll(PDO::FETCH_CLASS);
+
+            //Secuencia sin ordenar y sin limites
+            $sql = "SELECT $select FROM $relArray[0] $innerJoinText";
+
+            //Secuencia ordenada y sin limites
+            if ($order != null && $mode != null && $start == null && $end == null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText ORDER BY $order $mode";
+            }
+
+            //Secuencia ordenada y con limites
+            if ($order != null && $mode != null && $start != null && $end != null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText ORDER BY $order $mode LIMIT $start, $end";
+            }
+
+            //Secuencia sin ordenar y con limites
+            if ($order == null && $mode == null && $start != null && $end != null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText LIMIT $start, $end";
+            }
 
 
-        }else{
+            $stmt = Conexion::conectar()->prepare($sql);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_CLASS);
+        } else {
             return null;
         }
-     }
+    }
 
-       //PETICIONES GET CON FILTRO ENTRE TABLAS RELACIONADAS
-       static public function getRelDataFilter($rel, $type, $select, $linkto, $equalto, $order, $mode, $start, $end)
-       {
+    //PETICIONES GET CON FILTRO ENTRE TABLAS RELACIONADAS
+    static public function getRelDataFilter($rel, $type, $select, $linkto, $equalto, $order, $mode, $start, $end)
+    {
 
         //Organizamos los filtros
         $linktoArray = explode(",", $linkto);
@@ -147,54 +145,80 @@ class ModelGet
         }
 
 
-          //Organizamos las relaciones
-          $relArray = explode(",", $rel);
-          $typeArray = explode(",", $type);
-  
-          $innerJoinText = "";
-  
-          if (count($relArray) > 1) {
-              foreach ($relArray as $key => $value) {
-                  if ($key > 0) {
-                      $innerJoinText .= "INNER JOIN ".$value." ON ".$relArray[0].".".$typeArray[0]." = ".$value.".".$typeArray[$key]." ";
-                  }
-              }
-         
-           //Secuencia sin ordenar y sin limites
-           $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText";
-   
-           //Secuencia ordenada y sin limites
-           if ($order != null && $mode != null && $start == null && $end == null) {
-               $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText ORDER BY $order $mode";
-           }
-   
-           //Secuencia ordenada y con limites
-           if ($order != null && $mode != null && $start != null && $end != null) {
-               $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText ORDER BY $order $mode LIMIT $start, $end";
-           }
-   
-           //Secuencia sin ordenar y con limites
-           if ($order == null && $mode == null && $start != null && $end != null) {
-               $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText LIMIT $start, $end";
-           }
-   
-   
-           $stmt = Conexion::conectar()->prepare($sql);
+        //Organizamos las relaciones
+        $relArray = explode(",", $rel);
+        $typeArray = explode(",", $type);
 
-           foreach ($linktoArray as $key => $value) {
+        $innerJoinText = "";
 
-            $stmt->bindParam(":" . $value, $equaltoArray[$key], PDO::PARAM_STR);
+        if (count($relArray) > 1) {
+            foreach ($relArray as $key => $value) {
+                if ($key > 0) {
+                    $innerJoinText .= "INNER JOIN " . $value . " ON " . $relArray[0] . "." . $typeArray[0] . " = " . $value . "." . $typeArray[$key] . " ";
+                }
+            }
+
+            //Secuencia sin ordenar y sin limites
+            $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText";
+
+            //Secuencia ordenada y sin limites
+            if ($order != null && $mode != null && $start == null && $end == null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText ORDER BY $order $mode";
+            }
+
+            //Secuencia ordenada y con limites
+            if ($order != null && $mode != null && $start != null && $end != null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText ORDER BY $order $mode LIMIT $start, $end";
+            }
+
+            //Secuencia sin ordenar y con limites
+            if ($order == null && $mode == null && $start != null && $end != null) {
+                $sql = "SELECT $select FROM $relArray[0] $innerJoinText WHERE $linktoArray[0] = :$linktoArray[0] $linkToText LIMIT $start, $end";
+            }
+
+
+            $stmt = Conexion::conectar()->prepare($sql);
+
+            foreach ($linktoArray as $key => $value) {
+
+                $stmt->bindParam(":" . $value, $equaltoArray[$key], PDO::PARAM_STR);
+            }
+
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_CLASS);
+        } else {
+            return null;
         }
+    }
 
-   
-           $stmt->execute();
-   
-           return $stmt->fetchAll(PDO::FETCH_CLASS);
-  
-  
-          }else{
-              return null;
+    static public function getDataSearch($tabla, $select, $linkto, $search, $order, $mode, $start, $end)
+    {
+          //Secuencia sin ordenar y sin limites
+          $sql = "SELECT $select FROM $tabla WHERE $linkto LIKE '%$search%'";
+
+          //Secuencia ordenada y sin limites
+          if ($order != null && $mode != null && $start == null && $end == null) {
+              $sql = "SELECT $select FROM $tabla WHERE $linkto LIKE '%$search% ORDER BY $order $mode";
           }
-       }
- 
+  
+          //Secuencia ordenada y con limites
+          if ($order != null && $mode != null && $start != null && $end != null) {
+              $sql = "SELECT $select FROM $tabla WHERE $linkto LIKE '%$search% LIMIT $start, $end";
+          }
+  
+          //Secuencia sin ordenar y con limites
+          if ($order == null && $mode == null && $start != null && $end != null) {
+              $sql = "SELECT $select FROM $tabla WHERE $linkto LIKE '%$search% LIMIT $start, $end";
+          }
+  
+  
+          $stmt = Conexion::conectar()->prepare($sql);
+  
+          $stmt->execute();
+  
+          return $stmt->fetchAll(PDO::FETCH_CLASS);
+        
+    }
 }
