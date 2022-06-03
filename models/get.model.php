@@ -255,7 +255,7 @@ class ModelGet
             array_push($selectArray, $value);
         }
 
-        //NO REPETIR 
+        //NO REPETIR COLUMNAS
         $selectArray = array_unique($selectArray);
         if (empty(Conexion::getColumnsData($tabla, $selectArray))) {
 

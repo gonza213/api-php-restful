@@ -25,6 +25,11 @@ if (count($routesArray) < 2) {
 //Dominio Desarrollo
 if (count($routesArray) == 2 && isset($_SERVER['REQUEST_METHOD'])) {
 
+    //Dominio produccion
+    // $table = explode("?", $routesArray[1])[0];
+    //Dominio desarrollo
+    $table = explode("?", $routesArray[2])[0];
+
     //PETICION GET
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         include 'services/get.php';
@@ -34,17 +39,12 @@ if (count($routesArray) == 2 && isset($_SERVER['REQUEST_METHOD'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         include 'services/post.php';
-        
     }
 
     //PETICION PUT
     if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-        $json = array(
-            'status' => 200,
-            'result' => 'Solicitud PUT'
-        );
-
-        echo json_encode($json, http_response_code($json['status']));
+       
+        include 'services/put.php';
     }
 
     //PETICION DELETE

@@ -3,12 +3,6 @@
 require_once 'controllers/get.controller.php';
 require_once 'models/get.model.php';
 
-
-//Dominio produccion
-// $table = explode("?", $routesArray[1])[0];
-//Dominio desarrollo
-$table = explode("?", $routesArray[2])[0];
-
 //SELECT
 $select = $_GET['select'] ?? "*";
 //Order by
