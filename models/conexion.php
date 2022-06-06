@@ -17,6 +17,22 @@ class Conexion
         return $infoDB;
     }
 
+    //APIKEY
+    static public function apiKey()
+    {
+
+        return "k8kc2DfU6EB2yUUa7gGBZuih2VuUiZ";
+    }
+
+    //ACCESO PUBLICO
+    static public function publicAccess()
+    {
+
+        $tables = ['contactos'];
+
+        return $tables;
+    }
+
     //CONEXION  A LA BD
     static public function conectar()
     {
@@ -83,37 +99,32 @@ class Conexion
     }
 
     //VALIDAR EL TOKEN DE SEGURIDAD
-    static public function tokenValidate($token, $table){
+    static public function tokenValidate($token, $table)
+    {
         //TRAEMOS AL USUARIO DE ACUERDO AL TOKEN
         $user = ModelGet::getDataFilter($table, "token_expired", "token", $token, null, null, null, null);
 
-        if(!empty($user)){
+        if (!empty($user)) {
             //VALIDAMOS SI EL TOKEN HA EXPIRADO
             $time = time();
 
-            if($time < $user[0]->{'token_expired'}){
+            if ($time < $user[0]->{'token_expired'}) {
 
                 return "ok";
-            }else{
+            } else {
 
                 return "expired";
             }
-        }else{
+        } else {
 
             return "no-auth";
         }
-   
+
         // echo '<pre>';
         // print_r($user);
         // echo '</pre>';
         // return;
 
-        
-    }
 
-    //APIKEY
-    static public function apiKey(){
-
-        return "k8kc2DfU6EB2yUUa7gGBZuih2VuUiZ";
     }
 }
