@@ -262,7 +262,7 @@ class ModelGet
             return null;
         }
 
-        $searchArray = explode("_", $search);
+        $searchArray = explode(",", $search);
         $linkToText = "";
 
         if (count($linktoArray) > 1) {
@@ -337,7 +337,7 @@ class ModelGet
 
             //Organizamos los filtros
             $linktoArray = explode(",", $linkto);
-            $searchArray = explode("_", $search);
+            $searchArray = explode(",", $search);
             $linkToText = "";
 
             if (count($linktoArray) > 1) {

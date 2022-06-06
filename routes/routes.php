@@ -1,5 +1,7 @@
 <?php
 
+require_once "models/conexion.php";
+
 $routesArray = explode('/', $_SERVER['REQUEST_URI']);
 $routesArray = array_filter($routesArray);
 
@@ -30,6 +32,20 @@ if (count($routesArray) == 2 && isset($_SERVER['REQUEST_METHOD'])) {
     //Dominio desarrollo
     $table = explode("?", $routesArray[2])[0];
 
+    //VALIDAR LLAVE SECRETA
+    if (!isset(getallheaders()["Authorization"]) || getallheaders()["Authorization"] != Conexion::apiKey()) {
+
+
+        $json = array(
+            'status' => 404,
+            'result' => 'You are not authorized to make this request'
+        );
+
+        echo json_encode($json, http_response_code($json['status']));
+
+        return;
+    }
+
     //PETICION GET
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         include 'services/get.php';
@@ -43,17 +59,13 @@ if (count($routesArray) == 2 && isset($_SERVER['REQUEST_METHOD'])) {
 
     //PETICION PUT
     if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-       
+
         include 'services/put.php';
     }
 
     //PETICION DELETE
     if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-        $json = array(
-            'status' => 200,
-            'result' => 'Solicitud DELETE'
-        );
 
-        echo json_encode($json, http_response_code($json['status']));
+        include 'services/delete.php';
     }
 }

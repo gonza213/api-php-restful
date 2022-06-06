@@ -1,31 +1,16 @@
 <?php
 
 require_once 'models/conexion.php';
-require_once 'models/put.model.php';
-require_once 'controllers/put.controller.php';
+require_once 'models/delete.model.php';
+require_once 'controllers/delete.controller.php';
 
 
 if (isset($_GET['id']) && isset($_GET['id_name'])) {
 
 
-    //CAPTURAMOS LOS DATOS DEL FORMULARIO
-    $data = array();
-    parse_str(file_get_contents('php://input'), $data);
+    $columns = array($_GET['id_name']);
 
-    // echo '<pre>'; print_r(fopen('php://input', 'r')); echo '</pre>';
-    // return;
-
-    //SEPARAR PROPIEDADES DE UN ARREGLO
-    $columns = array();
-    foreach (array_keys($data) as $key => $value) {
-        array_push($columns, $value);
-    }
-
-    array_push($columns, $_GET['id_name']);
-    $columns = array_unique($columns);
-
-
-    // VALIDAR LAS TABLAS Y LAS COLUMNAS
+    //VALIDAR LAS TABLAS Y LAS COLUMNAS
     if (empty(Conexion::getColumnsData($table, $columns))) {
 
         $json = array(
@@ -38,9 +23,7 @@ if (isset($_GET['id']) && isset($_GET['id_name'])) {
         return;
     }
 
-
-
-
+   
     if (isset($_GET['token'])) {
 
         if ($_GET['token'] && isset($_GET['except'])) {
@@ -61,23 +44,23 @@ if (isset($_GET['id']) && isset($_GET['id_name'])) {
             }
 
 
-            //SOLICITAMOS RESPUESTA DEL CONTROLADOR PARA EDITAR DATOS EN CUALQUIER TABLA 
-            $response = new ControllerPut();
-            $response->putData($table, $data, $_GET['id'], $_GET['id_name']);
+            //SOLICITAMOS RESPUESTA DEL CONTROLADOR PARA ELIMINAR DATOS EN CUALQUIER TABLA 
+            $response = new ControllerDelete();
+            $response->deleteData($table, $_GET['id'], $_GET['id_name']);
         } else {
 
-                //PETICIÓN PARA USUARIOS AUTORIZADOS
+               //PETICIÓN PARA USUARIOS AUTORIZADOS
             $tableToken = $_GET['table'] ?? 'users';
-
 
             $validate = Conexion::tokenValidate($_GET['token'], $tableToken);
 
 
+            //TOKEN CORRECTO
             if ($validate == "ok") {
 
-                //SOLICITAMOS RESPUESTA DEL CONTROLADOR PARA EDITAR DATOS EN CUALQUIER TABLA 
-                $response = new ControllerPut();
-                $response->putData($table, $data, $_GET['id'], $_GET['id_name']);
+                //SOLICITAMOS RESPUESTA DEL CONTROLADOR PARA ELIMINAR DATOS EN CUALQUIER TABLA 
+                $response = new ControllerDelete();
+                $response->deleteData($table, $_GET['id'], $_GET['id_name']);
 
                 //ERROR: TOKEN EXPIRADO
             } else if ($validate == "expired") {
